@@ -2,3 +2,4 @@ dietcalendar/dev_db.sqlite3
 dietcalendar/dietcalendar/settings/local_settings.py
 dietcalendar/dietcalendar/settings/__pycache__/
 **/__pycache__/
+dietcalendar/db.sqlite3
