@@ -1,0 +1,11 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <p>Lista składników dania {{dish_name}}</p>
+	<ul class="list-group list-group-flush">
+	{% for ingredient in ingredient_list %}
+	    <li class="list-group-item">{{  ingredient.ingredient_id  }} <b>{{ingredient.quantity}} {{ingredient.ingredient_id.unit_id}}</b></li>
+	{% endfor %}
+	</ul>
+	<p><a class="btn btn-outline-dark" role="button" href="{% url 'add_dish_details' dish_name %}">Add new ingredients to recipe?</a></p>
+{% endblock %}

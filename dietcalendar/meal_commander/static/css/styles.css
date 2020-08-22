@@ -1,0 +1,25 @@
+.sidebar-nav {
+    margin-top: 20%;
+    padding: 0;
+    list-style: none;
+}
+
+.container-fluid {
+	width: 80%;
+}
+
+.helptext {
+
+}
+
+.li .list-group-item{
+	white-space: pre-wrap
+}
+
+.btn {
+	border : 1px solid #ced4da
+}
+
+.selectpicker{
+	background: white
+}

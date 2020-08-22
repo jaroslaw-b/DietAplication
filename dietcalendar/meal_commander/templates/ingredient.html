@@ -1,0 +1,12 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<p><a class="btn btn-outline-dark" role="button" href="{% url 'add_ingredient' %}">Add new ingredient?</a></p>
+  <p>W bazie danych zapisano następujące składniki:</p>
+	<ul class="list-group list-group-flush">
+	{% for ingredient in ingredient_list %}
+	    <li class="list-group-item">{{ ingredient.name }} ({{ingredient.unit_id.unit_type}})</li>
+	{% endfor %}
+	</ul>
+	<p><a class="btn btn-outline-dark" role="button" href="{% url 'add_ingredient' %}">Add new ingredient?</a></p>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <p>There are following meals in your plan stored:</p>
+
+<div class="list-group">
+  <h2 class="display-4">1st breakfests</h2>
+  {% for dish in dish_list_1st_breakfest %}
+          <a class="list-group-item list-group-item-action" href="dish/{{dish.name}}">{{dish.name}}</a>
+      {% if forloop.last %}
+          <a class="btn btn-outline-dark" role="button" href="{% url 'add_dish' 0 %}">Add Meal</a>
+    {% endif %}
+      {% empty %}
+        <a class="btn btn-outline-dark" role="button" href="{% url 'add_dish' 0 %}">Add Meal</a>
+      {%endfor%}
+</div>
+
+<div class="list-group">
+  <h2 class="display-4">2nd breakfests</h2>
+  {% for dish in dish_list_2nd_breakfest %}
+          <a class="list-group-item list-group-item-action" href="dish/{{dish.name}}">{{dish.name}}</a>
+      {% if forloop.last %}
+          <a class="btn btn-outline-dark" role="button" href="{% url 'add_dish' 1 %}">Add Meal!</a>
+    {% endif %}
+      {% empty %}
+        <a class="btn btn-outline-dark" role="button" href="{% url 'add_dish' 1 %}">Add Meal!</a>
+      {%endfor%}
+</div>
+
+<div class="list-group">
+  <h2 class="display-4">Dinners</h2>
+  {% for dish in dish_list_dinner %}
+          <a class="list-group-item list-group-item-action" href="dish/{{dish.name}}">{{dish.name}}</a>
+      {% if forloop.last %}
+          <a class="btn btn-outline-dark" role="button" href="{% url 'add_dish' 2 %}">Add Meal!</a>
+    {% endif %}
+      {% empty %}
+        <a class="btn btn-outline-dark" role="button" href="{% url 'add_dish' 2 %}">Add Meal!</a>
+      {%endfor%}
+</div>
+
+<div class="list-group">
+  <h2 class="display-4">Suppers</h2>
+  {% for dish in dish_list_supper %}
+          <a class="list-group-item list-group-item-action" href="dish/{{dish.name}}">{{dish.name}}</a>
+      {% if forloop.last %}
+          <a class="btn btn-outline-dark" role="button" href="{% url 'add_dish' 3 %}">Add Meal!</a>
+    {% endif %}
+      {% empty %}
+        <a class="btn btn-outline-dark" role="button" href="{% url 'add_dish' 3 %}">Add Meal!</a>
+      {%endfor%}
+</div>
+
+
+{% endblock %}
