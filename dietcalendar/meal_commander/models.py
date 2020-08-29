@@ -113,6 +113,17 @@ class CalendarPlanForm(ModelForm):
 	class Meta:
 		model=CalendarPlan
 		fields = ['dish_id', 'meal_date', 'actual_type']
+		widgets = {
+			'dish_id' : forms.Select(
+				attrs={'class' : 'form-control'}
+				),
+			'meal_date' : forms.DateInput(
+				attrs={'class' : 'form-control'},
+				),
+			'actual_type' : forms.Select(
+				attrs={'class' : 'form-control'},
+				)
+		}
 
 
 class IngredientForm(ModelForm):

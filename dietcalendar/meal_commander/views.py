@@ -220,21 +220,27 @@ def create_plan_calendar(request, calendar_year=-1, calendar_week=-1):
 	return render(request, 'calendar_plan.html', context=context)
 
 
-def add_dish_to_calendarplan(request, day, month, year, meal_type):
+def add_dish_to_calendarplan(request, day, month, year, meal_type, delete=0):
 
 	if request.method == 'POST':
 		form = CalendarPlanForm(request.POST, request.FILES)
 		form.save()
 		return HttpResponseRedirect(reverse('create_plan_calendar'))
 
+	if delete:
+		CalendarPlan.objects.filter(meal_date=datetime.date(year=year, month=month, day=day), actual_type=meal_type).delete()
+
 	form = CalendarPlanForm(initial = {'meal_date' : datetime.date(year=year, month=month, day=day), 'actual_type' : meal_type})
 	form['meal_date'].disabled = True
+	form['actual_type'].disabled = True
 	form.fields["dish_id"].queryset = Dish.objects.filter(meal_type=meal_type)
 
 	context = {
 		'form' : form,
 	}
-
-	return render(request, 'add_dish_to_calendarplan.html', context=context)
+	if not delete:
+		return render(request, 'add_dish_to_calendarplan.html', context=context)
+	else:
+		return HttpResponseRedirect(reverse('create_plan_calendar'))
 
 

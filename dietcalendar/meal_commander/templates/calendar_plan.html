@@ -23,7 +23,7 @@
   {% for day in week_dates %}
       <th>
         <a href="{% url 'add_dish_to_calendarplan' day|date:'Y' day|date:'n' day|date:'j' 0 %}">+</a>
-        <a href="{% url 'add_dish_to_calendarplan' week_dates|first|date:'Y' 1 1 1 %}">-</br></a>
+        <a href="{% url 'add_dish_to_calendarplan' day|date:'Y' day|date:'n' day|date:'j' 0 1 %}">-</br></a>
         {% for dish in dish_list_1st_breakfest %}
 			{% if day|date:"Y n j" == dish.meal_date|date:"Y n j" %}
 				<a href="dish/{{dish.dish_id}}">{{dish.dish_id}}</a></br>
@@ -38,7 +38,7 @@
       {% for day in week_dates %}
       <th>
         <a href="{% url 'add_dish_to_calendarplan' day|date:'Y' day|date:'n' day|date:'j' 1 %}">+</a>
-        <a href="{% url 'add_dish_to_calendarplan' week_dates|first|date:'Y' 1 1 1 %}"> -</br></a>
+        <a href="{% url 'add_dish_to_calendarplan' day|date:'Y' day|date:'n' day|date:'j' 1 1 %}"> -</br></a>
         {% for dish in dish_list_2nd_breakfest %}
         {% if day|date:"Y n j" == dish.meal_date|date:"Y n j" %}
           <a href="dish/{{dish.dish_id}}">{{dish.dish_id}}</a>
@@ -52,7 +52,7 @@
       {% for day in week_dates %}
       <th>
         <a href="{% url 'add_dish_to_calendarplan' day|date:'Y' day|date:'n' day|date:'j' 2 %}">+</a>
-        <a href="{% url 'add_dish_to_calendarplan' week_dates|first|date:'Y' 1 1 1 %}"> -</br></a>
+        <a href="{% url 'add_dish_to_calendarplan' day|date:'Y' day|date:'n' day|date:'j' 2 1 %}"> -</br></a>
         {% for dish in dish_list_dinner %}
         {% if day|date:"Y n j" == dish.meal_date|date:"Y n j" %}
           <a href="dish/{{dish.dish_id}}">{{dish.dish_id}}</a>
@@ -66,7 +66,7 @@
       {% for day in week_dates %}
       <th>
         <a href="{% url 'add_dish_to_calendarplan' day|date:'Y' day|date:'n' day|date:'j' 3 %}">+</a>
-        <a href="{% url 'add_dish_to_calendarplan' week_dates|first|date:'Y' 1 1 1 %}"> -</br></a>
+        <a href="{% url 'add_dish_to_calendarplan' day|date:'Y' day|date:'n' day|date:'j' 3 1 %}"> -</br></a>
         {% for dish in dish_list_supper %}
         {% if day|date:"Y n j" == dish.meal_date|date:"Y n j" %}
           <a href="dish/{{dish.dish_id}}">{{dish.dish_id}}</a>
