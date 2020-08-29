@@ -15,5 +15,8 @@ urlpatterns = [
     path('add_dish/<int:meal_type>', views.add_dish, name='add_dish'),
     path('create_plan', views.create_plan, name='create_plan'),
     path('create_plan/<int:day>/<int:meal_type>', views.create_plan, name='create_plan'),
-    path('create_plan/<int:day>/<int:meal_type>/<int:delete>', views.create_plan, name='create_plan')
+    path('create_plan/<int:day>/<int:meal_type>/<int:delete>', views.create_plan, name='create_plan'),
+    path('create_plan_calendar/<int:calendar_year>/<int:calendar_week>', views.create_plan_calendar, name='create_plan_calendar'),
+    path('create_plan_calendar/', views.create_plan_calendar, name='create_plan_calendar'),
+    path('create_plan_calendar/add_dish_to_calendarplan/<int:year>/<int:month>/<int:day>/<int:meal_type>', views.add_dish_to_calendarplan, name='add_dish_to_calendarplan')
 ]

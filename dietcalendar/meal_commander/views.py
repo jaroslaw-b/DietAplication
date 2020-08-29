@@ -6,8 +6,8 @@ from django.views.generic.edit import CreateView
 from django.db.models import Count, Sum
 from django.db.models import Prefetch
 from django.db.models import prefetch_related_objects
-
-from .models import Dish, Ingredient, DietIngredientQuantity, Unit, IngredientForm, DietIngredientQuantityFormSet, DishForm, Plan, PlanForm
+import datetime
+from .models import Dish, Ingredient, DietIngredientQuantity, Unit, IngredientForm, DietIngredientQuantityFormSet, DishForm, Plan, PlanForm, CalendarPlan, CalendarPlanForm
 
 # Create your views here.
 def index(request):
@@ -180,3 +180,61 @@ def create_plan(request, day=-1, meal_type=-1, delete=0):
 		# return render(request, 'create_plan.html', context=context)
 	else:
 		return render(request, 'add_dish_to_weekplan.html', context=context)
+
+def create_plan_calendar(request, calendar_year=-1, calendar_week=-1):
+
+	year_now, week_now, day_now = datetime.datetime.now().isocalendar()
+	if calendar_year == -1 and calendar_week == -1:
+		calendar_year = year_now
+		calendar_week = week_now
+	dish_list_1st_breakfest = CalendarPlan.objects.filter(actual_type=0).filter(meal_date__year=calendar_year).filter(meal_date__week=calendar_week).order_by('meal_date')
+	dish_list_2nd_breakfest = CalendarPlan.objects.filter(actual_type=1).filter(meal_date__year=calendar_year).filter(meal_date__week=calendar_week).order_by('meal_date')
+	dish_list_dinner = CalendarPlan.objects.filter(actual_type=2).filter(meal_date__year=calendar_year).filter(meal_date__week=calendar_week).order_by('meal_date')
+	dish_list_supper = CalendarPlan.objects.filter(actual_type=3).filter(meal_date__year=calendar_year).filter(meal_date__week=calendar_week).order_by('meal_date')
+
+	# today = datetime.datetime.now() + datetime.timedelta(weeks=calendar_week-week_now)
+	today = datetime.datetime.fromisocalendar(calendar_year, calendar_week, 1)
+	# today = datetime.datetime.strptime(d + '-1', "%Y-W%W-%w")
+	dates = [today + datetime.timedelta(days=i) for i in range(0 - today.weekday(), 7 - today.weekday())]
+
+	# print(dates)
+
+	last_week = datetime.date(calendar_year, 12, 28).isocalendar()[1]
+
+	next_week_year = {'week' : 1, 'year':calendar_year+1} if calendar_week == last_week else {'week' : calendar_week+1, 'year':calendar_year}
+	previous_week_year = {'week' : datetime.date(calendar_year-1, 12, 28).isocalendar()[1], 'year':calendar_year-1} if calendar_week == 1 else {'week' : calendar_week-1, 'year':calendar_year}
+	current_week_year = {'week' : week_now, 'day' : day_now, 'year' : year_now}
+
+
+	context = {
+		'dish_list_1st_breakfest' : dish_list_1st_breakfest,
+		'dish_list_2nd_breakfest' : dish_list_2nd_breakfest,
+		'dish_list_dinner' : dish_list_dinner,
+		'dish_list_supper' : dish_list_supper,
+		'next_week' : next_week_year,
+		'previous_week' : previous_week_year,
+		'current_week' : current_week_year,
+		'week_dates' : dates
+	}
+
+	return render(request, 'calendar_plan.html', context=context)
+
+
+def add_dish_to_calendarplan(request, day, month, year, meal_type):
+
+	if request.method == 'POST':
+		form = CalendarPlanForm(request.POST, request.FILES)
+		form.save()
+		return HttpResponseRedirect(reverse('create_plan_calendar'))
+
+	form = CalendarPlanForm(initial = {'meal_date' : datetime.date(year=year, month=month, day=day), 'actual_type' : meal_type})
+	form['meal_date'].disabled = True
+	form.fields["dish_id"].queryset = Dish.objects.filter(meal_type=meal_type)
+
+	context = {
+		'form' : form,
+	}
+
+	return render(request, 'add_dish_to_calendarplan.html', context=context)
+
+

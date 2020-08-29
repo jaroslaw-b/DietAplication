@@ -97,6 +97,24 @@ class PlanForm(ModelForm):
 				)
 		}
 
+class CalendarPlan(models.Model):
+	MEAL_TYPE_CHOICES = (
+		(0, '1st breakfest'),
+		(1, '2nd breakfest'),
+		(2, 'Dinner'),
+		(3, 'Supper'),
+	)
+
+	meal_date = models.DateField()
+	dish_id = models.ForeignKey(Dish, on_delete=models.CASCADE)
+	actual_type = models.IntegerField(default=0, choices=MEAL_TYPE_CHOICES)
+
+class CalendarPlanForm(ModelForm):
+	class Meta:
+		model=CalendarPlan
+		fields = ['dish_id', 'meal_date', 'actual_type']
+
+
 class IngredientForm(ModelForm):
 	class Meta:
 		model = Ingredient
@@ -113,37 +131,6 @@ class IngredientForm(ModelForm):
 					},
 				)
 		}
-
-# class DietIngredientQuantityForm(ModelForm):
-# 	class Meta:
-# 		model=DietIngredientQuantity
-# 		fields = ['dish_id']
-# 	#dish_id = forms.ModelChoiceField(queryset=Dish.objects.all(), required=True)
-# 	ing_0 = forms.ModelChoiceField(queryset=Ingredient.objects.all())
-# 	ing_1 = forms.ModelChoiceField(queryset=Ingredient.objects.all())
-# 	ing_2 = forms.ModelChoiceField(queryset=Ingredient.objects.all())
-# 	quan_0 = forms.IntegerField()
-# 	quan_1 = forms.IntegerField()
-# 	quan_2 = forms.IntegerField()
-
-# 	def save(self):
-# 		for i in range(3):
-# 			ing = self["ing_{}".format(i)]
-# 			quan = self["quan_{}".format(i)]
-# 			DietIngredientQuantity.objects.create(
-# 	               dish_id=Dish.objects.filter(pk=self['dish_id']), ingredient_id=ing, quantity=quan)
-
-# class DietIngredientQuantityFormSet(ModelForm):
-# 	class Meta:
-# 		model=DietIngredientQuantity
-# 		exclude=['dish_id']
-
-# class DietIngredientQuantityForm(ModelForm):
-# 	class Meta:
-# 		model = DietIngredientQuantity
-# 		fields=('ingredient_id', 'quantity')
-# 		exclude=('dish_id',)
-
 
 DietIngredientQuantityFormSet = modelformset_factory(DietIngredientQuantity, exclude=('dish_id',) , fields=('ingredient_id', 'quantity'), extra=4, widgets = {
 			'ingredient_id' : forms.Select(
