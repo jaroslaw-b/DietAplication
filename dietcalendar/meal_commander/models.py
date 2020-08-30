@@ -17,15 +17,6 @@ class Ingredient(models.Model):
 		return self.name
 
 class Dish(models.Model):
-	# DAY_CHOICES = (
-	# 	(0 ,'Monday'),
-	# 	(1, 'Tuesday'),
-	# 	(2, 'Wednesday'),
-	# 	(3, 'Thursday'),
-	# 	(4, 'Friday'),
-	# 	(5, 'Saturday'),
-	# 	(6, 'Sunday'),
-	# 	)
 
 	MEAL_TYPE_CHOICES = (
 		(0, '1st breakfest'),
@@ -36,19 +27,14 @@ class Dish(models.Model):
 
 	at_plan = models.IntegerField(default=0)
 	name = models.CharField(max_length=30)
-	# day = models.IntegerField(default=0, choices=DAY_CHOICES)
 	meal_type = models.IntegerField(default=0, choices=MEAL_TYPE_CHOICES)
-	#ingredient_id = models.ManyToManyField(Ingredient)
+
 	def __str__(self):
 		return self.name
 
 	def get_absolute_url(self):
 		return reverse('dish')
 
-# class Diet(models.Model):
-# 	dish_id = models.ForeignKey(Dish, on_delete=models.CASCADE, null=True)
-# 	ingredient_id = models.ManyToManyField(Ingredient)
-# 	#quantity = models.IntegerField(default=0)
 
 class DietIngredientQuantity(models.Model):
 	dish_id = models.ForeignKey(Dish, on_delete=models.CASCADE)
@@ -76,7 +62,7 @@ class Plan(models.Model):
 		(2, 'Dinner'),
 		(3, 'Supper'),
 	)
-	#calendar_week = models.IntegerField(default=0)
+
 	actual_day = models.IntegerField(default=0, choices=DAY_CHOICES)
 	actual_type = models.IntegerField(default=0, choices=MEAL_TYPE_CHOICES)
 	dish_id = models.ForeignKey(Dish, on_delete=models.CASCADE)
@@ -159,10 +145,6 @@ DietIngredientQuantityFormSet = modelformset_factory(DietIngredientQuantity, exc
 				'ingredient_id' : 'Ingredient',
 				'quantity'		: 'Quantity'
 			},
-			# help_texts={
-			# 	'ingredient_id' : 'Name of ingredient',
-			# 	'quantity'		: 'Quantity of ingredient'
-			# }
 			)
 
 
