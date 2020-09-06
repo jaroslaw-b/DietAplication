@@ -104,7 +104,7 @@ class CalendarPlanForm(ModelForm):
 				attrs={'class' : 'form-control'}
 				),
 			'meal_date' : forms.DateInput(
-				attrs={'class' : 'form-control'},
+				attrs={'class' : 'form-control', 'type' : 'date'},
 				),
 			'actual_type' : forms.Select(
 				attrs={'class' : 'form-control'},

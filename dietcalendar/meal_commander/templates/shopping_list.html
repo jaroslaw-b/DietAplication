@@ -1,0 +1,27 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<p>Generate shopping list from:</p>
+<form>
+<label for="date1">Shopping list start</label>
+<input type="date" id="date1" name="date1" value="{{ date1 }}">
+
+<label for="date1">Shopping list end</label>
+<input type="date" id="date2" name="date2" value="{{ date2 }}">
+
+<button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<p>Shopping list:</p>
+
+<ul class=".list-group-flush">
+{% for item in shopping_list %}
+    <!-- <li>{{ item.ingredient_id__name }}: {{item.quantity}} {{item.ingredient_id__unit_id__unit_type}}</li> -->
+    <li class="list-group-item">{{ item }}</li>
+{% empty %}
+<p>No meals in plan ;(</p>
+{% endfor %}
+</ul>
+
+{% endblock %}
