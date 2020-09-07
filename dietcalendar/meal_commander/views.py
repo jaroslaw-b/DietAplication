@@ -7,7 +7,7 @@ from django.db.models import Count, Sum
 from django.db.models import Prefetch
 from django.db.models import prefetch_related_objects
 import datetime
-from .models import Dish, Ingredient, DietIngredientQuantity, Unit, IngredientForm, DietIngredientQuantityFormSet, DishForm, Plan, PlanForm, CalendarPlan, CalendarPlanForm
+from .models import Dish, Ingredient, DietIngredientQuantity, Unit, IngredientForm, DietIngredientQuantityFormSet, DishForm, CalendarPlan, CalendarPlanForm
 
 # Create your views here.
 def index(request):
@@ -111,72 +111,6 @@ def add_dish(request, meal_type):
 	}
 
 	return render(request, 'add_dish.html', context=context)
-
-def create_plan(request, day=-1, meal_type=-1, delete=0):
-
-	dish_list_1st_breakfest = Plan.objects.filter(actual_type=0).order_by('actual_day')
-	dish_list_2nd_breakfest = Plan.objects.filter(actual_type=1).order_by('actual_day')
-	dish_list_dinner = Plan.objects.filter(actual_type=2).order_by('actual_day')
-	dish_list_supper = Plan.objects.filter(actual_type=3).order_by('actual_day')
-	
-	#Delete meals from specified day and type
-	if delete:
-		Plan.objects.filter(actual_day=day, actual_type=meal_type).delete()
-	
-	if request.method == 'POST' and not delete:
-		form = PlanForm(request.POST, request.FILES)
-		form.save()
-		return HttpResponseRedirect(reverse('create_plan'))
-	#Handling GET request
-	else:
-		form = PlanForm(initial = {'actual_day' : day, 'actual_type' : meal_type})
-		form.fields["dish_id"].queryset = Dish.objects.filter(meal_type=meal_type)
-	
-
-	q1 = []
-	#Iteraring over all meals in plan to collect ingredients, quantity with units
-	for e in Plan.objects.all():
-		recipe = list(DietIngredientQuantity.objects.filter(dish_id=e.dish_id).values('ingredient_id__name', 'quantity', 'ingredient_id__unit_id__unit_type'))
-		q1.append(recipe)
-	
-	#List flattening
-	q1_list = [item for sublist in q1 for item in sublist]
-
-	#Ordered lists of ingredients/quantities/units
-	q1_list_ing = [ el['ingredient_id__name'] for el in q1_list]
-	q1_list_quan = [ el['quantity'] for el in q1_list]
-	q1_list_unit = [ el['ingredient_id__unit_id__unit_type'] for el in q1_list]
-
-	#Ingredient quantity aggregation
-	q1_list_ing_dict = {}
-	for index,id_ in enumerate(q1_list_ing):
-	    if id_ not in q1_list_ing_dict.keys():
-	        q1_list_ing_dict[id_] = 0
-	    q1_list_ing_dict[id_] = q1_list_ing_dict[id_] + q1_list_quan[index]
-
-	#Matching units to ingredient
-	shopping_list_to_template = []
-	for key,val in q1_list_ing_dict.items():
-		shopping_list_to_template.append("{0:40}".format(key) + str(val) + str(q1_list_unit[q1_list_ing.index(key)]))
-
-
-
-
-	context = {
-		'form' : form,
-		'dish_list_1st_breakfest' : dish_list_1st_breakfest,
-		'dish_list_2nd_breakfest' : dish_list_2nd_breakfest,
-		'dish_list_dinner' : dish_list_dinner,
-		'dish_list_supper' : dish_list_supper,
-		'shopping_list' : shopping_list_to_template,
-	}
-
-	# When there is no specific meal to add generate plan view
-	if day == -1 or delete == 1:
-		return render(request, 'create_plan.html', context=context)
-	# When day and/or meal type is specified, add new meal to plan
-	else:
-		return render(request, 'add_dish_to_weekplan.html', context=context)
 
 def plan_calendar(request, calendar_year=-1, calendar_week=-1):
 

@@ -45,44 +45,6 @@ class DietIngredientQuantity(models.Model):
 	class Meta:
 		unique_together = ('dish_id', 'ingredient_id')
 
-class Plan(models.Model):
-	DAY_CHOICES = (
-		(0 ,'Monday'),
-		(1, 'Tuesday'),
-		(2, 'Wednesday'),
-		(3, 'Thursday'),
-		(4, 'Friday'),
-		(5, 'Saturday'),
-		(6, 'Sunday'),
-	)
-
-	MEAL_TYPE_CHOICES = (
-		(0, '1st breakfest'),
-		(1, '2nd breakfest'),
-		(2, 'Dinner'),
-		(3, 'Supper'),
-	)
-
-	actual_day = models.IntegerField(default=0, choices=DAY_CHOICES)
-	actual_type = models.IntegerField(default=0, choices=MEAL_TYPE_CHOICES)
-	dish_id = models.ForeignKey(Dish, on_delete=models.CASCADE)
-
-class PlanForm(ModelForm):
-	class Meta:
-		model = Plan
-		fields = ['dish_id', 'actual_day', 'actual_type']
-		widgets = {
-			'dish_id' : forms.Select(
-				attrs={'class' : 'form-control'}
-				),
-			'actual_day' : forms.Select(
-				attrs={'class' : 'form-control'},
-				),
-			'actual_type' : forms.Select(
-				attrs={'class' : 'form-control'},
-				)
-		}
-
 class CalendarPlan(models.Model):
 	MEAL_TYPE_CHOICES = (
 		(0, '1st breakfest'),
