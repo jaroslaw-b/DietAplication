@@ -78,6 +78,7 @@ class add_dish_to_calendarplanTest(TestCase):
 		self.assertEqual(response.status_code, 200)
 		self.assertContains(response, dish[0]['name'])
 
+# Tests shopping list view
 class shopping_listTest(TestCase):
 
 	def setUp(self):
@@ -91,12 +92,14 @@ class shopping_listTest(TestCase):
 		DietIngredientQuantity.objects.create(dish_id=Dish.objects.get(pk=1), ingredient_id=Ingredient.objects.get(pk=3), quantity=30)
 		CalendarPlan.objects.create(meal_date=datetime.date(2020, 2, 10), dish_id=Dish.objects.get(pk=1), actual_type=1)
 
+# Message displayed if in provided period there's no meals
 	def test_empty_shopping_list(self):
 
 		response = self.client.get('/shopping_list')
 		self.assertEqual(response.status_code, 200)
 		self.assertContains(response, 'No meals in plan ;(')
 
+# Checks if list of ingredients is present when there are some meals in provided period
 	def test_shopping_list_with_one_meal(self):
 		response = self.client.get('/shopping_list?date1=2020-02-06&date2=2020-02-13')
 		self.assertEqual(response.status_code, 200)
@@ -106,7 +109,9 @@ class shopping_listTest(TestCase):
 		self.assertContains(response, '10')
 		self.assertContains(response, '20')
 		self.assertContains(response, '30')
+		self.assertNotContains(response, 'No meals in plan ;(')
 
+# Check if list of ingredients is present when there are some meals in front edge of period
 	def test_shopping_list_with_one_meal_edge(self):
 		response = self.client.get('/shopping_list?date1=2020-02-10&date2=2020-02-13')
 		self.assertEqual(response.status_code, 200)
@@ -116,7 +121,9 @@ class shopping_listTest(TestCase):
 		self.assertContains(response, '10')
 		self.assertContains(response, '20')
 		self.assertContains(response, '30')
+		self.assertNotContains(response, 'No meals in plan ;(')
 
+# Check if list of ingredients is present when there are some meals in bottom edge of period
 	def test_shopping_list_with_one_meal_edge2(self):
 		response = self.client.get('/shopping_list?date1=2020-02-08&date2=2020-02-10')
 		self.assertEqual(response.status_code, 200)
@@ -126,3 +133,17 @@ class shopping_listTest(TestCase):
 		self.assertContains(response, '10')
 		self.assertContains(response, '20')
 		self.assertContains(response, '30')
+		self.assertNotContains(response, 'No meals in plan ;(')
+
+# Check if list of ingredients is correct for two meals
+	def test_shopping_list_with_two_same_meals(self):
+		CalendarPlan.objects.create(meal_date=datetime.date(2020, 2, 9), dish_id=Dish.objects.get(pk=1), actual_type=1)
+		response = self.client.get('/shopping_list?date1=2020-02-08&date2=2020-02-10')
+		self.assertEqual(response.status_code, 200)
+		self.assertContains(response, 'ing1')
+		self.assertContains(response, 'ing2')
+		self.assertContains(response, 'ing3')
+		self.assertContains(response, '20')
+		self.assertContains(response, '40')
+		self.assertContains(response, '60')
+		self.assertNotContains(response, 'No meals in plan ;(')

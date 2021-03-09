@@ -29,6 +29,11 @@ class Dish(models.Model):
 	name = models.CharField(max_length=30)
 	meal_type = models.IntegerField(default=0, choices=MEAL_TYPE_CHOICES)
 
+	kcal = models.FloatField(default=0.0)
+	carbohydrates = models.FloatField(default=0.0)
+	fat = models.FloatField(default=0.0)
+	proteins = models.FloatField(default=0.0)
+
 	def __str__(self):
 		return self.name
 
@@ -113,7 +118,7 @@ DietIngredientQuantityFormSet = modelformset_factory(DietIngredientQuantity, exc
 class DishForm(ModelForm):
 	class Meta:
 		model = Dish
-		fields = ['name', 'meal_type']
+		fields = ['name', 'meal_type', 'kcal', 'proteins', 'fat', 'carbohydrates', 'proteins']
 		widgets = {
 			'name' : forms.TextInput(
 				attrs={
@@ -124,6 +129,26 @@ class DishForm(ModelForm):
 				attrs={
 				'class' : 'form-control'
 					},
-				)
+				),
+			'kcal' : forms.NumberInput(
+				attrs={
+				'class' : 'form-control'
+					},
+				),
+			'carbohydrates' : forms.NumberInput(
+				attrs={
+				'class' : 'form-control'
+					},
+				),
+			'proteins' : forms.NumberInput(
+				attrs={
+				'class' : 'form-control'
+					},
+				),
+			'fat' : forms.NumberInput(
+				attrs={
+				'class' : 'form-control'
+					},
+				),
 		}
 

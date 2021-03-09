@@ -58,10 +58,13 @@ def plan_detail(request, plan_id):
 def dish_detail(request, dish_name):
 
 	ingredient_list = DietIngredientQuantity.objects.filter(dish_id__name = dish_name)
-
+	dish_details = Dish.objects.filter(name = dish_name)
+	#dish_paramers = (dish_details.kcal, dish_details.proteins, dish_details.fat, dish_details.carbohydrates)
 	context = {
 		'ingredient_list' : ingredient_list,
 		'dish_name' : dish_name,
+		'dish_parameters' : dish_details,
+
 	}
 	return render(request, 'dish_detail.html', context=context)
 
@@ -125,6 +128,16 @@ def plan_calendar(request, calendar_year=-1, calendar_week=-1):
 	dish_list_2nd_breakfest = dish_for_day.filter(actual_type=1)
 	dish_list_dinner = dish_for_day.filter(actual_type=2)
 	dish_list_supper = dish_for_day.filter(actual_type=3)
+
+	#print(dish_list_1st_breakfest.values())
+
+	meals_details_for_day = {'monday': [0.0, 0.0, 0.0, 0.0], 'tuesday': [0.0, 0.0, 0.0, 0.0],
+	 'wednesday' : [0.0, 0.0, 0.0, 0.0], 'thursday' : [0.0, 0.0, 0.0, 0.0],
+	 'friday' : [0.0, 0.0, 0.0, 0.0], 'saturday' : [0.0, 0.0, 0.0, 0.0], 'sunday' : [0.0, 0.0, 0.0, 0.0]}
+
+	for dish in dish_list_1st_breakfest:
+		pass
+		# print(dish.kcal)
 
 	# List of all dates in current week
 	current_week_start = datetime.datetime.fromisocalendar(calendar_year, calendar_week, 1)
