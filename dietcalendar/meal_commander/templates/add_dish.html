@@ -9,14 +9,49 @@
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 </div> -->
-<div class="form-group">
+
+<form method="post">
+  {% csrf_token %}
+    <div class="row mp-5">
+    	<div class="col-8">
+        {{ form.name }}
+   		 </div>
+   		 <div class="col-4">
+   		 {{ form.meal_type }}
+   		 </div>
+    </div>
+
+    <table class="table table table-bordered text-center">
+		<thead>
+			<tr>
+				<th>Energy:</th>
+				<th>Proteins</th>
+				<th>Fat</th>
+				<th>Carbohydrates</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th>{{ form.kcal }} KCal</th>
+				<th>{{ form.proteins }} g</th>
+				<th>{{ form.fat }} g</th>
+				<th>{{ form.carbohydrates }} g</th>
+			</tr>
+		</tbody>
+	</table>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
+<!-- <div class="form-group">
 <form method="post">
 	{% csrf_token %}
 	{{form.as_p}}
 
     <button type="submit" class="btn btn-outline-dark">Submit</button>
 </form>
-</div>
+</div> -->
 
 
 {% endblock %}

@@ -7,7 +7,7 @@
 	    <li class="list-group-item">{{  ingredient.ingredient_id  }} <b>{{ingredient.quantity}} {{ingredient.ingredient_id.unit_id}}</b></li>
 	{% endfor %}
 	</ul>
-	<table class="table table-hover table table-bordered text-center">
+	<table class="table table-bordered text-center">
 		<thead>
 			<tr>
 				<th>Energy:</th>
@@ -28,4 +28,5 @@
 		</tbody>
 	</table>
 	<p><a class="btn btn-outline-dark" role="button" href="{% url 'add_dish_details' dish_name %}">Add new ingredients to recipe?</a></p>
+	<p><a class="btn btn-outline-danger" role="button" href="{% url 'delete_dish' dish_name %}">Delete meal?</a></p>
 {% endblock %}

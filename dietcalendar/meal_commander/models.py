@@ -26,7 +26,7 @@ class Dish(models.Model):
 		)
 
 	at_plan = models.IntegerField(default=0)
-	name = models.CharField(max_length=30)
+	name = models.CharField(max_length=100)
 	meal_type = models.IntegerField(default=0, choices=MEAL_TYPE_CHOICES)
 
 	kcal = models.FloatField(default=0.0)
@@ -96,7 +96,7 @@ class IngredientForm(ModelForm):
 				)
 		}
 
-DietIngredientQuantityFormSet = modelformset_factory(DietIngredientQuantity, exclude=('dish_id',) , fields=('ingredient_id', 'quantity'), extra=4, widgets = {
+DietIngredientQuantityFormSet = modelformset_factory(DietIngredientQuantity, exclude=('dish_id',) , fields=('ingredient_id', 'quantity'), extra=10, widgets = {
 			'ingredient_id' : forms.Select(
 				attrs={
 				'class' : 'form-control selectpicker' ,

@@ -115,6 +115,25 @@ def add_dish(request, meal_type):
 
 	return render(request, 'add_dish.html', context=context)
 
+def delete_dish(request, dish_name):
+
+	dish_details = Dish.objects.filter(name = dish_name).delete()
+	
+	dish_list_1st_breakfest = Dish.objects.filter(meal_type=0)
+	dish_list_2nd_breakfest = Dish.objects.filter(meal_type=1)
+	dish_list_dinner = Dish.objects.filter(meal_type=2)
+	dish_list_supper = Dish.objects.filter(meal_type=3)
+
+	context = {
+		'dish_list_1st_breakfest' : dish_list_1st_breakfest,
+		'dish_list_2nd_breakfest' : dish_list_2nd_breakfest,
+		'dish_list_dinner' : dish_list_dinner,
+		'dish_list_supper' : dish_list_supper,
+
+	}
+
+	return HttpResponseRedirect(reverse('dish'))
+
 def plan_calendar(request, calendar_year=-1, calendar_week=-1):
 
 	year_now, week_now, day_now = datetime.datetime.now().isocalendar()
